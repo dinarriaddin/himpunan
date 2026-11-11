@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multimedia Interaktif Himpunan</title>
+<style>
+:root{
+  --navy:#22356b;--navy2:#162350;--sun:#ffb703;--sky:#8ecae6;--mint:#2ec4b6;--pink:#ef476f;
+  --bg:#f3f6ff;--card:#fff;--ink:#1c2541;--mute:#5d6b8a;--line:#dbe3f5;--ok:#1f9d63;--bad:#d63a3a;--r:18px;
+  --sbw:244px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;line-height:1.55}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit}
+sup{font-size:.7em;line-height:0}
+.app{display:flex;min-height:100vh}
+
+/* ---------- SIDEBAR ---------- */
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--sbw);background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff;padding:18px 14px;display:flex;flex-direction:column;gap:6px;z-index:20}
+.brand{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.logo{width:44px;height:44px;flex:none}
+.brand b{display:block;font-size:1.12rem;line-height:1.1}
+.brand small{opacity:.75;font-size:.74rem}
+.nav{border:0;background:transparent;color:#fff;text-align:left;padding:11px 13px;border-radius:12px;display:flex;align-items:center;gap:11px;font-size:.98rem;transition:.2s}
+.nav:hover{background:rgba(255,255,255,.12)}
+.nav.on{background:var(--sun);color:#2a1d00;font-weight:700;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.nav .ic{font-size:1.25rem;width:26px;text-align:center}
+.sidefoot{margin-top:auto;font-size:.78rem;opacity:.85}
+.pbar{height:8px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden;margin:6px 0 10px}
+.pbar i{display:block;height:100%;width:0;background:var(--sun);transition:width .4s}
+
+main{margin-left:var(--sbw);flex:1;min-width:0;padding:22px clamp(14px,2.6vw,34px) 50px}
+.page{display:none}
+.page.show{display:block;animation:pgIn .35s ease both}
+@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1,h2,h3{margin:0}
+.pagehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.pagehead h1{font-size:clamp(1.3rem,2.6vw,1.8rem);color:var(--navy)}
+.btn{border:0;border-radius:12px;padding:10px 18px;font-weight:700;background:var(--navy);color:#fff;transition:.15s;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.btn:hover{filter:brightness(1.12)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sun{background:var(--sun);color:#2a1d00}
+.btn.mint{background:var(--mint);color:#06332e}
+.btn.pink{background:var(--pink)}
+.btn.line{background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:none}
+.btn.sm{padding:6px 12px;font-size:.86rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:0 6px 18px rgba(34,53,107,.06)}
+
+/* ---------- MATERI ---------- */
+.mat{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.slidecard{min-height:470px;position:relative;overflow:hidden}
+#slideText{--dx:40px}
+#slideText.out{opacity:0;transform:translateX(calc(var(--dx) * -1));transition:.18s}
+#slideText.in{animation:slideIn .42s ease both}
+@keyframes slideIn{from{opacity:0;transform:translateX(var(--dx))}to{opacity:1;transform:none}}
+.kick{display:inline-block;background:#e7efff;color:var(--navy);font-weight:700;font-size:.78rem;border-radius:99px;padding:3px 12px;margin-bottom:6px;letter-spacing:.03em}
+.ttl{font-size:clamp(1.4rem,2.6vw,1.9rem);color:var(--navy);margin-bottom:10px;line-height:1.2}
+.nw{display:inline-block;white-space:nowrap}
+.w{display:inline-block;opacity:0;transform:translateY(10px);animation:wIn .45s ease forwards;animation-delay:var(--d,0s)}
+@keyframes wIn{to{opacity:1;transform:none}}
+.slidecard p{margin:.35em 0}
+.slidecard ul{margin:.4em 0;padding-left:1.2em}
+.slidecard li{margin:.3em 0}
+.def{background:#fff7e0;border-left:6px solid var(--sun);border-radius:10px;padding:10px 14px;margin:10px 0}
+.ex{background:#eaf8f6;border-left:6px solid var(--mint);border-radius:10px;padding:10px 14px;margin:10px 0}
+.warn{background:#ffeaf0;border-left:6px solid var(--pink);border-radius:10px;padding:10px 14px;margin:10px 0}
+.math{font-family:Cambria,"Cambria Math",Georgia,serif;font-size:1.06em}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two>div{border-radius:12px;padding:8px 12px}
+.yes{background:#e6f7ee}.no{background:#fdeaea}
+.mini{width:100%;border-collapse:collapse;font-size:.92rem;margin:8px 0}
+.mini th,.mini td{border:1px solid var(--line);padding:5px 9px;text-align:center}
+.mini th{background:#e7efff;color:var(--navy)}
+.tri{display:grid;gap:8px}
+.tri>div{background:#f3f6ff;border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.stagecard{display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,#fff,#f3f8ff)}
+.venn{width:100%;height:auto;display:block}
+.vS{fill:#fff;stroke:#9fb0d8;stroke-width:2;stroke-dasharray:7 5}
+.tA{fill:#8ecae6;fill-opacity:.38}.tB{fill:#ffb703;fill-opacity:.32}
+.oA{fill:none;stroke:#1d4e89;stroke-width:3}.oB{fill:none;stroke:#d97700;stroke-width:3}
+.hl{fill:#ef476f;fill-opacity:.7}
+.lab{font-weight:800;font-size:20px;font-family:Cambria,Georgia,serif}
+.lA{fill:#1d4e89}.lB{fill:#b86200}.lS{fill:#6a79a3}
+.num{font-size:17px;font-weight:700;text-anchor:middle;dominant-baseline:central;fill:#1c2541;font-family:Cambria,Georgia,serif}
+.cnt{font-size:24px;font-weight:800;text-anchor:middle;dominant-baseline:central;fill:#1c2541}
+.stcap{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:8px 12px;font-size:.9rem;color:var(--mute);text-align:center;min-height:2.8em;display:flex;align-items:center;justify-content:center;transition:opacity .25s}
+.ctrl{display:flex;align-items:center;gap:12px;margin-top:14px}
+.dots{flex:1;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.dots button{width:13px;height:13px;border-radius:50%;border:0;background:#c9d4f0;padding:0;transition:.2s}
+.dots button.on{background:var(--navy);transform:scale(1.35)}
+.dots button.seen{background:#8aa0d6}
+.cnt2{font-weight:700;color:var(--navy);min-width:64px;text-align:center}
+.sbar{height:6px;background:#e1e8fa;border-radius:99px;overflow:hidden;margin-top:12px}
+.sbar i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--sun));width:0;transition:width .5s}
+
+/* ---------- SIMULASI ---------- */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{border:2px solid var(--navy);background:#fff;color:var(--navy);border-radius:99px;padding:7px 16px;font-weight:700}
+.tab.on{background:var(--navy);color:#fff}
+.simwrap{display:none}.simwrap.show{display:block;animation:pgIn .3s ease both}
+.simgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:start}
+.fld{margin:8px 0}
+.fld label{display:block;font-weight:700;font-size:.88rem;color:var(--navy);margin-bottom:3px}
+.fld input[type=text]{width:100%;border:2px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+.fld input[type=text]:focus,.field input:focus{outline:none;border-color:var(--navy)}
+.opsbtn{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.opsbtn button{border:2px solid var(--pink);background:#fff;color:#a8123a;border-radius:10px;padding:5px 11px;font-weight:700;font-family:Cambria,Georgia,serif;font-size:1rem}
+.opsbtn button.on{background:var(--pink);color:#fff}
+.preset{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.preset button{border:0;background:#e7efff;color:var(--navy);border-radius:99px;padding:4px 12px;font-size:.84rem;font-weight:600}
+.result{background:#fff7e0;border:2px solid var(--sun);border-radius:12px;padding:10px 14px;margin-top:10px;font-family:Cambria,Georgia,serif;font-size:1.1rem}
+.info{font-size:.88rem;color:var(--mute);margin-top:8px}
+.info b{color:var(--ink)}
+.it{font-size:13px;text-anchor:middle;dominant-baseline:central;fill:#8591ae}
+.it.on{fill:#a8123a;font-weight:800}
+.vh{transition:opacity .3s}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.pool button{border:2px solid var(--mint);background:#fff;border-radius:99px;padding:6px 14px;font-weight:700;color:#0b6f66}
+.pool button.on{background:var(--mint);color:#06332e}
+.subs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sub{border-radius:10px;padding:4px 10px;font-family:Cambria,Georgia,serif;font-size:.95rem;border:1.5px solid;animation:wIn .4s ease both;opacity:0;animation-delay:var(--d,0s)}
+.s0{background:#f0f0f0;border-color:#999}.s1{background:#e3f2ff;border-color:#4a90d9}.s2{background:#e6f7ee;border-color:#2e9e63}.s3{background:#fff4d6;border-color:#d9a100}.s4{background:#ffe9ef;border-color:#d6456f}.s5{background:#efe6ff;border-color:#7a4fd0}
+.sl{display:grid;grid-template-columns:130px 1fr 44px;gap:8px;align-items:center;margin:8px 0;font-size:.92rem}
+.sl input[type=range]{width:100%;accent-color:var(--navy)}
+.sl output{font-weight:800;color:var(--navy);text-align:right}
+
+/* ---------- EVALUASI ---------- */
+.field{margin:12px 0}
+.field label{display:block;font-weight:700;color:var(--navy);margin-bottom:4px}
+.field input{width:100%;border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:1rem}
+.rules{background:#f3f6ff;border-radius:12px;padding:10px 16px;margin:12px 0;font-size:.93rem}
+.rules li{margin:3px 0}
+.qtop{position:sticky;top:0;z-index:5;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(34,53,107,.08)}
+.timer{font-weight:800;font-size:1.35rem;font-variant-numeric:tabular-nums;color:var(--navy);background:#e7efff;border-radius:10px;padding:2px 14px}
+.timer.warn{background:#fff0c2;color:#8a5a00}
+.timer.danger{background:#ffd9d9;color:#a30000;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.qlayout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px;margin-top:12px;align-items:start}
+.qno{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.qno button{border:2px solid var(--line);background:#fff;border-radius:9px;padding:6px 0;font-weight:700;color:var(--navy)}
+.qno button.done{background:#d9f3e6;border-color:#7ccba1}
+.qno button.cur{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy)}
+.qtext{font-size:1.08rem;margin:0 0 12px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;cursor:pointer;transition:.15s;background:#fff}
+.opt:hover{border-color:#9db4ec;background:#f7f9ff}
+.opt.sel{border-color:var(--navy);background:#eaf0ff}
+.opt .k{flex:none;width:28px;height:28px;border-radius:50%;background:#e7efff;color:var(--navy);display:grid;place-items:center;font-weight:800;font-size:.88rem}
+.opt.sel .k{background:var(--navy);color:#fff}
+.qnav{display:flex;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap}
+.score{font-size:4rem;font-weight:900;color:var(--navy);line-height:1}
+.scoreRow{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.chipk{display:inline-block;border-radius:99px;padding:3px 12px;font-weight:700;font-size:.88rem;margin-right:6px}
+.status{border-radius:12px;padding:10px 14px;margin:12px 0;font-size:.92rem;background:#eef3ff}
+.status.ok{background:#e1f6ea;color:#14633d}
+.status.bad{background:#fff0d9;color:#7a4b00}
+.rev{border-left:5px solid var(--line);padding:6px 12px;margin:10px 0;border-radius:6px;background:#fafbff}
+.rev.r{border-color:var(--ok)}.rev.w{border-color:var(--bad)}
+.rev small{color:var(--mute)}
+
+/* ---------- PENGEMBANG ---------- */
+.dev{display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px}
+.avatar{width:150px;height:150px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--mint));color:#fff;display:grid;place-items:center;font-size:3.4rem;font-weight:800;margin:0 auto 12px;box-shadow:0 8px 20px rgba(34,53,107,.25)}
+.tag{display:inline-block;background:#e7efff;color:var(--navy);border-radius:99px;padding:3px 12px;font-size:.84rem;font-weight:600;margin:3px 3px 0 0}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.feat>div{background:#f3f6ff;border-radius:12px;padding:10px 12px}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:980px){
+  .mat,.simgrid,.dev,.qlayout{grid-template-columns:1fr}
+  .qlayout aside{order:-1}
+  .qno{grid-template-columns:repeat(10,1fr)}
+}
+@media(max-width:760px){
+  :root{--sbw:0px}
+  .side{position:sticky;width:auto;flex-direction:row;flex-wrap:wrap;padding:8px 10px;gap:4px;align-items:center}
+  .app{flex-direction:column}
+  .brand{margin:0 8px 0 0}.brand small,.sidefoot{display:none}
+  .nav{padding:8px 10px;font-size:.88rem}.nav .ic{width:auto}
+  main{margin-left:0}
+  .two{grid-template-columns:1fr}
+  .sl{grid-template-columns:100px 1fr 38px}
+}
+@media(prefers-reduced-motion:reduce){
+  .w,.sub{animation:none;opacity:1;transform:none}
+  #slideText.in{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+<nav class="side" aria-label="Menu utama">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="32" r="17" fill="#8ecae6" fill-opacity=".85"/><circle cx="40" cy="32" r="17" fill="#ffb703" fill-opacity=".8"/><path d="M32 18.2a17 17 0 0 1 0 27.6a17 17 0 0 1 0-27.6z" fill="#ef476f"/></svg>
+    <div><b>Himpunan</b><small>Multimedia interaktif</small></div>
+  </div>
+  <button class="nav on" data-go="materi"><span class="ic">📖</span>Materi</button>
+  <button class="nav" data-go="simulasi"><span class="ic">🧪</span>Simulasi</button>
+  <button class="nav" data-go="evaluasi"><span class="ic">📝</span>Evaluasi</button>
+  <button class="nav" data-go="pengembang"><span class="ic">👨‍🏫</span>Pengembang</button>
+  <div class="sidefoot">
+    Materi yang sudah dibuka: <b id="sbPct">0%</b>
+    <div class="pbar"><i id="sbBar"></i></div>
+    Dinar Riaddin, M.Pd.
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= MATERI ================= -->
+<section class="page show" id="p-materi">
+  <div class="pagehead"><h1>📖 Materi: Himpunan</h1><span class="cnt2" id="slideNo">1 / 15</span></div>
+  <div class="mat">
+    <div class="card slidecard"><div id="slideText"></div></div>
+    <div class="card stagecard">
+      <div id="stageBox"></div>
+      <div class="stcap" id="stCap"></div>
+    </div>
+  </div>
+  <div class="ctrl">
+    <button class="btn line" id="bBack">◀ Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn sun" id="bNext">Next ▶</button>
+  </div>
+  <div class="sbar"><i id="sBar"></i></div>
+</section>
+
+<!-- ================= SIMULASI ================= -->
+<section class="page" id="p-simulasi">
+  <div class="pagehead"><h1>🧪 Simulasi Himpunan</h1></div>
+  <div class="tabs" id="simTabs">
+    <button class="tab on" data-t="op">Operasi Himpunan</button>
+    <button class="tab" data-t="kuasa">Himpunan Bagian</button>
+    <button class="tab" data-t="cacah">Diagram Cacah (Soal Cerita)</button>
+  </div>
+
+  <!-- Operasi -->
+  <div class="simwrap show" id="sim-op">
+    <div class="simgrid">
+      <div class="card">
+        <h3>Atur himpunannya</h3>
+        <div class="info" style="margin:4px 0 6px">Ketik anggota dipisah koma. Anggota boleh angka atau kata.</div>
+        <div class="preset" id="presets"></div>
+        <div class="fld"><label for="inS">Himpunan semesta S</label><input type="text" id="inS"></div>
+        <div class="fld"><label for="inA">Himpunan A</label><input type="text" id="inA"></div>
+        <div class="fld"><label for="inB">Himpunan B</label><input type="text" id="inB"></div>
+        <div class="info" style="margin-top:4px"><b>Pilih operasi:</b></div>
+        <div class="opsbtn" id="opBtns"></div>
+        <div class="result" id="opRes"></div>
+        <div class="info" id="opInfo"></div>
+      </div>
+      <div class="card"><div id="smBox"></div><div class="info" id="smNote" style="text-align:center"></div></div>
+    </div>
+  </div>
+
+  <!-- Himpunan bagian -->
+  <div class="simwrap" id="sim-kuasa">
+    <div class="card">
+      <h3>Berapa banyak himpunan bagiannya?</h3>
+      <p class="info">Klik benda untuk memasukkannya ke himpunan <b>H</b>. Lihat semua himpunan bagian dari H.</p>
+      <div class="pool" id="pool"></div>
+      <div class="result" id="kRes"></div>
+      <div id="kTbl"></div>
+      <div class="subs" id="subs"></div>
+    </div>
+  </div>
+
+  <!-- Cacah -->
+  <div class="simwrap" id="sim-cacah">
+    <div class="simgrid">
+      <div class="card">
+        <h3>Soal cerita dengan diagram Venn</h3>
+        <div class="fld"><label for="scn">Pilih cerita</label>
+          <select id="scn" style="width:100%;border:2px solid var(--line);border-radius:10px;padding:8px"></select></div>
+        <div class="sl"><label for="rS" id="lS">Semua</label><input type="range" id="rS" min="10" max="100" value="40"><output id="oS">40</output></div>
+        <div class="sl"><label for="rA" id="lA">A</label><input type="range" id="rA" min="0" max="40" value="25"><output id="oA">25</output></div>
+        <div class="sl"><label for="rB" id="lB">B</label><input type="range" id="rB" min="0" max="40" value="18"><output id="oB">18</output></div>
+        <div class="sl"><label for="rI">Keduanya</label><input type="range" id="rI" min="0" max="18" value="6"><output id="oI">6</output></div>
+        <div class="result" id="cRes"></div>
+        <div class="info" id="cNote"></div>
+      </div>
+      <div class="card"><div id="cnBox"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EVALUASI ================= -->
+<section class="page" id="p-evaluasi">
+  <div class="pagehead"><h1>📝 Evaluasi</h1></div>
+
+  <div class="card" id="evStart" style="max-width:640px">
+    <h3>Isi data diri lalu mulai</h3>
+    <div class="field"><label for="fNama">Nama lengkap</label><input id="fNama" type="text" autocomplete="off" placeholder="Contoh: Siti Rahma"></div>
+    <div class="field"><label for="fKelas">Kelas</label><input id="fKelas" type="text" autocomplete="off" placeholder="Contoh: VII-A"></div>
+    <ul class="rules">
+      <li>Jumlah soal: <b>20 soal pilihan ganda</b> (urutan soal dan pilihan diacak).</li>
+      <li>Waktu: <b>30 menit</b>. Soal dikumpulkan otomatis saat waktu habis.</li>
+      <li>Nilai tampil di layar dan dikirim ke email guru.</li>
+    </ul>
+    <div class="status bad" id="evErr" style="display:none"></div>
+    <button class="btn sun" id="bStartQ">Mulai Evaluasi ▶</button>
+  </div>
+
+  <div id="evQuiz" style="display:none">
+    <div class="qtop">
+      <div><b id="qWho"></b><br><small id="qAns" style="color:var(--mute)"></small></div>
+      <div>Sisa waktu <span class="timer" id="qTimer">30:00</span></div>
+    </div>
+    <div class="qlayout">
+      <div class="card">
+        <div class="kick" id="qNum"></div>
+        <p class="qtext" id="qText"></p>
+        <div id="qOpts"></div>
+        <div class="qnav">
+          <button class="btn line" id="qPrev">◀ Sebelumnya</button>
+          <button class="btn" id="qNext">Berikutnya ▶</button>
+        </div>
+      </div>
+      <aside class="card">
+        <b>Nomor soal</b>
+        <div class="qno" id="qNo" style="margin:8px 0 12px"></div>
+        <button class="btn pink" id="bFinish" style="width:100%">Selesai &amp; Kumpulkan</button>
+      </aside>
+    </div>
+  </div>
+
+  <div class="card" id="evDone" style="display:none;max-width:760px">
+    <h3 id="dHello"></h3>
+    <div class="scoreRow" style="margin:10px 0">
+      <div class="score" id="dScore">0</div>
+      <div id="dDetail"></div>
+    </div>
+    <div class="status" id="dSend"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn mint sm" id="bResend" style="display:none">↻ Coba kirim lagi</button>
+      <button class="btn sm" id="bMailto">✉ Kirim lewat aplikasi email</button>
+      <button class="btn line sm" id="bCopy">📋 Salin hasil</button>
+      <button class="btn line sm" id="bRev">Lihat pembahasan</button>
+    </div>
+    <div id="dRev" style="display:none;margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- ================= PENGEMBANG ================= -->
+<section class="page" id="p-pengembang">
+  <div class="pagehead"><h1>👨‍🏫 Pengembang</h1></div>
+  <div class="dev">
+    <div class="card" style="text-align:center">
+      <div class="avatar" aria-hidden="true">DR</div>
+      <h3 style="color:var(--navy)">Dinar Riaddin, M.Pd.</h3>
+      <p style="margin:.3em 0;color:var(--mute);font-size:.92rem">Dosen &amp; Ketua Program Studi Statistika</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--navy)">Tentang pengembang</h3>
+      <p>Dinar Riaddin, M.Pd. adalah dosen sekaligus Ketua Program Studi Statistika, Fakultas Komunikasi, Data Sains, dan Informatika (FKDSI), UIN Abdul Muthalib Sangadji Ambon, Maluku.</p>
+      <div>
+        <span class="tag">Pendidikan matematika</span><span class="tag">Media pembelajaran berbasis ICT</span><span class="tag">Etnomatematika</span><span class="tag">Kearifan lokal Maluku</span>
+      </div>
+      <h3 style="color:var(--navy);margin-top:16px">Tentang multimedia ini</h3>
+      <p>Multimedia ini dirancang agar siswa belajar himpunan secara bertahap, mencoba sendiri lewat simulasi, lalu mengukur pemahaman lewat evaluasi.</p>
+      <div class="feat">
+        <div><b>📖 Materi</b><br>15 halaman dengan animasi teks dan diagram Venn yang berubah bentuk (morph) tiap pindah halaman.</div>
+        <div><b>🧪 Simulasi</b><br>Operasi himpunan, himpunan bagian, dan diagram cacah untuk soal cerita.</div>
+        <div><b>📝 Evaluasi</b><br>20 soal pilihan ganda berwaktu, dengan nilai langsung tampil dan dikirim ke guru.</div>
+      </div>
+      <p class="info" style="margin-top:14px">Landasan desain: prinsip pembelajaran multimedia (penyajian bertahap, isyarat visual, interaktivitas) dan pendekatan konstruktivistik.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* =====================================================================
+   KONFIGURASI
+   ===================================================================== */
+const GURU_EMAIL = 'dinar.riaddi@uinambon.ac.id';   // tujuan pengiriman nilai
+const DURASI_MENIT = 30;
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* =====================================================================
+   DIAGRAM VENN (pembangun markup + pengatur geometri)
+   ===================================================================== */
+function venn(p, extra = '') {
+  const full = 'x="0" y="0" width="400" height="300"';
+  const R = 'x="14" y="14" width="372" height="272" rx="12"';
+  const cA = (cls = '') => `<circle class="${p}cA ${cls}" cx="150" cy="150" r="85"/>`;
+  const cB = (cls = '') => `<circle class="${p}cB ${cls}" cx="250" cy="150" r="85"/>`;
+  return `<svg viewBox="0 0 400 300" class="venn" id="${p}svg" role="img" aria-label="Diagram Venn">
+  <defs>
+    <clipPath id="${p}clA"><circle class="${p}cA" cx="150" cy="150" r="85"/></clipPath>
+    <mask id="${p}nA" maskUnits="userSpaceOnUse" ${full}><rect ${full} fill="#fff"/><circle class="${p}cA" cx="150" cy="150" r="85" fill="#000"/></mask>
+    <mask id="${p}nB" maskUnits="userSpaceOnUse" ${full}><rect ${full} fill="#fff"/><circle class="${p}cB" cx="250" cy="150" r="85" fill="#000"/></mask>
+  </defs>
+  <rect id="${p}S" class="vS" ${R}/>
+  <circle id="${p}bA" class="${p}cA tA" cx="150" cy="150" r="85"/>
+  <circle id="${p}bB" class="${p}cB tB" cx="250" cy="150" r="85"/>
+  <g id="${p}h_A" class="hl vh" style="opacity:0">${cA()}</g>
+  <g id="${p}h_B" class="hl vh" style="opacity:0">${cB()}</g>
+  <g id="${p}h_inter" class="hl vh" style="opacity:0"><g clip-path="url(#${p}clA)">${cB()}</g></g>
+  <g id="${p}h_union" class="hl vh" style="opacity:0">${cA()}${cB()}</g>
+  <g id="${p}h_minusAB" class="hl vh" style="opacity:0"><circle class="${p}cA" cx="150" cy="150" r="85" mask="url(#${p}nB)"/></g>
+  <g id="${p}h_minusBA" class="hl vh" style="opacity:0"><circle class="${p}cB" cx="250" cy="150" r="85" mask="url(#${p}nA)"/></g>
+  <g id="${p}h_compA" class="hl vh" style="opacity:0"><rect ${R} mask="url(#${p}nA)"/></g>
+  <g id="${p}h_compB" class="hl vh" style="opacity:0"><rect ${R} mask="url(#${p}nB)"/></g>
+  <g id="${p}h_compU" class="hl vh" style="opacity:0"><g mask="url(#${p}nA)"><rect ${R} mask="url(#${p}nB)"/></g></g>
+  <g id="${p}h_sym" class="hl vh" style="opacity:0"><circle class="${p}cA" cx="150" cy="150" r="85" mask="url(#${p}nB)"/><circle class="${p}cB" cx="250" cy="150" r="85" mask="url(#${p}nA)"/></g>
+  <circle id="${p}oA" class="${p}cA oA" cx="150" cy="150" r="85"/>
+  <circle id="${p}oB" class="${p}cB oB" cx="250" cy="150" r="85"/>
+  <text id="${p}lA" class="lab lA" x="87" y="87">A</text>
+  <text id="${p}lB" class="lab lB" x="313" y="87">B</text>
+  <text id="${p}lS" class="lab lS" x="30" y="40">S</text>
+  ${extra}
+  </svg>`;
+}
+function setGeom(p, s) {
+  $$('.' + p + 'cA').forEach(e => { e.setAttribute('cx', s.Ax); e.setAttribute('cy', s.Ay); e.setAttribute('r', Math.max(0, s.Ar)); });
+  $$('.' + p + 'cB').forEach(e => { e.setAttribute('cx', s.Bx); e.setAttribute('cy', s.By); e.setAttribute('r', Math.max(0, s.Br)); });
+  const set = (id, x, y) => { const e = $('#' + p + id); e.setAttribute('x', x); e.setAttribute('y', y); };
+  set('lA', s.Ax - s.Ar * .74, s.Ay - s.Ar * .74);
+  set('lB', s.Bx + s.Br * .74, s.By - s.Br * .74);
+}
+const OVERLAP = {Ax:150, Ay:150, Ar:85, Bx:250, By:150, Br:85};
+
+/* =====================================================================
+   MATERI: data slide
+   ===================================================================== */
+const base = {Ax:200, Ay:150, Ar:0, Bx:200, By:150, Br:0, Ao:1, Bo:0, So:0,
+  hA:0, hB:0, hInter:0, hUnion:0, hMinus:0, hCompA:0, hCompU:0,
+  nums:0, cnt:0, dots:0, la:0, lb:0};
+const SCAT = [[55,60],[335,48],[92,225],[305,232],[172,38],[262,96],[58,150],[348,152],[140,258],[236,252],[120,110],[300,180]];
+const GEO = {
+  none:{},
+  single:{Ax:200,Ay:150,Ar:95,Ao:1},
+  small:{Ax:200,Ay:150,Ar:72,Ao:1},
+  subset:{Ax:200,Ay:164,Ar:52,Bx:200,By:150,Br:105,Bo:1,Ao:1},
+  disjoint:{Ax:115,Ay:150,Ar:75,Bx:285,By:150,Br:72,Bo:1,Ao:1},
+  overlap:Object.assign({Ao:1,Bo:1}, OVERLAP)
+};
+function sunflower(i, s) {
+  const r = .66 * s.Ar * Math.sqrt((i + .6) / 12.6), a = i * 2.39996;
+  return [s.Ax + r * Math.cos(a), s.Ay + r * Math.sin(a)];
+}
+function mk(geo, over = {}, dotMode = 'in') {
+  const s = Object.assign({}, base, GEO[geo], over);
+  for (let i = 0; i < 12; i++) {
+    const p = dotMode === 'scatter' ? SCAT[i] : sunflower(i, s);
+    s['dx' + i] = p[0]; s['dy' + i] = p[1];
+  }
+  return s;
+}
+const SL = [
+ { k:'Pendahuluan', t:'Apa itu Himpunan?',
+   h:`<p>Dalam kehidupan sehari-hari kita sering mengelompokkan benda: rempah-rempah, buah, atau teman sekelas.</p>
+      <div class="def"><b>Himpunan</b> adalah kumpulan objek yang <b>didefinisikan dengan jelas</b>, sehingga kita dapat memastikan suatu objek termasuk atau tidak termasuk dalam kumpulan itu.</div>
+      <ul><li>Contoh: kumpulan rempah khas Maluku, yaitu <i>pala</i> dan <i>cengkih</i>.</li><li>Objek yang ada di dalam himpunan disebut <b>anggota</b> atau <b>elemen</b>.</li></ul>`,
+   st: mk('none', {dots:1}, 'scatter'),
+   cap:'Titik-titik ini belum dikelompokkan. Tekan Next dan lihat bagaimana mereka menjadi sebuah himpunan.' },
+ { k:'Pendahuluan', t:'Himpunan atau Bukan?',
+   h:`<div class="two">
+        <div class="yes"><b>✔ Himpunan</b><ul><li>Bilangan prima kurang dari 10</li><li>Hari dalam seminggu</li><li>Nama bulan berawalan huruf J</li></ul></div>
+        <div class="no"><b>✘ Bukan himpunan</b><ul><li>Makanan yang lezat</li><li>Siswa yang pintar</li><li>Bunga yang indah</li></ul></div>
+      </div>
+      <div class="warn">Kata <i>lezat, pintar,</i> dan <i>indah</i> bersifat subjektif: batasannya tidak jelas, sehingga tidak ada kepastian siapa yang termasuk anggota.</div>`,
+   st: mk('single', {Ar:105, dots:1, la:1}),
+   cap:'Objek yang jelas batasannya dapat dikumpulkan dalam satu lingkaran: himpunan A.' },
+ { k:'Konsep Dasar', t:'Anggota dan Notasi',
+   h:`<ul><li>Nama himpunan memakai <b>huruf kapital</b>: A, B, C, ….</li>
+      <li>Anggota ditulis di dalam <b>kurung kurawal</b> { } dan dipisah koma.</li>
+      <li><span class="math">∈</span> dibaca “anggota dari”, <span class="math">∉</span> dibaca “bukan anggota dari”.</li>
+      <li><span class="math">n(A)</span> menyatakan banyak anggota himpunan A.</li></ul>
+      <div class="ex"><b>Contoh.</b> H = {pala, cengkih, sagu, kelapa}<br>
+        pala <span class="math">∈</span> H, &nbsp; ikan <span class="math">∉</span> H, &nbsp; <span class="math">n(H) = 4</span></div>`,
+   st: mk('single', {Ar:100, dots:1, la:1}),
+   cap:'Setiap titik di dalam lingkaran adalah anggota; titik di luar lingkaran bukan anggota.' },
+ { k:'Konsep Dasar', t:'Cara Menyatakan Himpunan',
+   h:`<div class="tri">
+        <div><b>1. Mendaftar anggota</b><br><span class="math">P = {2, 3, 5, 7}</span></div>
+        <div><b>2. Menyebutkan sifat</b><br><span class="math">P</span> = himpunan bilangan prima kurang dari 10</div>
+        <div><b>3. Notasi pembentuk himpunan</b><br><span class="math">P = { x | x bilangan prima, x &lt; 10 }</span></div>
+      </div>
+      <p>Dibaca: “P adalah himpunan semua <i>x</i> sedemikian sehingga <i>x</i> bilangan prima kurang dari 10”. Ketiga cara ini menyatakan himpunan yang sama.</p>`,
+   st: mk('single', {Ar:100, dots:1, la:1}),
+   cap:'Satu himpunan dapat ditulis dengan tiga cara yang berbeda.' },
+ { k:'Jenis Himpunan', t:'Kosong, Semesta, dan Kardinal',
+   h:`<ul><li><b>Himpunan kosong</b> <span class="math">∅</span> atau { }: tidak punya anggota, <span class="math">n(∅) = 0</span>.</li>
+      <li><b>Himpunan semesta</b> <span class="math">S</span>: semua objek yang sedang dibicarakan.</li>
+      <li><b>Berhingga</b> bila anggotanya dapat dihitung; <b>tak berhingga</b> bila tidak.</li></ul>
+      <div class="ex">Bilangan asli yang kurang dari 1 adalah himpunan kosong.</div>
+      <div class="warn">Hati-hati: <span class="math">{0}</span> bukan himpunan kosong, karena memiliki satu anggota, yaitu 0.</div>`,
+   st: mk('small', {So:1, la:1}),
+   cap:'Persegi panjang S adalah himpunan semesta. Himpunan A berada di dalamnya.' },
+ { k:'Hubungan Himpunan', t:'Himpunan Bagian (⊆)',
+   h:`<div class="def"><span class="math">A ⊆ B</span> bila <b>setiap anggota A</b> juga anggota B.</div>
+      <div class="ex"><b>Contoh.</b> A = {1, 2}, B = {1, 2, 3, 4}<br>Maka <span class="math">A ⊂ B</span> (A himpunan bagian sejati dari B).</div>
+      <ul><li><span class="math">∅ ⊆ A</span> untuk setiap himpunan A.</li><li><span class="math">A ⊆ A</span>: setiap himpunan adalah himpunan bagian dari dirinya sendiri.</li></ul>`,
+   st: mk('subset', {So:1, la:1, lb:1, hA:1}),
+   cap:'Lingkaran A (merah muda) berada seluruhnya di dalam lingkaran B, sehingga A ⊂ B.' },
+ { k:'Hubungan Himpunan', t:'Banyak Himpunan Bagian',
+   h:`<div class="def">Himpunan dengan <b>n anggota</b> memiliki <b><span class="math">2<sup>n</sup></span></b> himpunan bagian.</div>
+      <table class="mini"><tr><th>n</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>2<sup>n</sup></th><td>1</td><td>2</td><td>4</td><td>8</td><td>16</td></tr></table>
+      <div class="ex"><b>Contoh.</b> A = {a, b, c} punya 2³ = 8 himpunan bagian:<br><span class="math">∅, {a}, {b}, {c}, {a,b}, {a,c}, {b,c}, {a,b,c}</span></div>
+      <p>Coba menu <b>Simulasi → Himpunan Bagian</b> untuk melihatnya secara langsung.</p>`,
+   st: mk('subset', {So:1, la:1, lb:1, hB:0.0, hA:0}),
+   cap:'Setiap tambahan satu anggota menggandakan banyak himpunan bagian.' },
+ { k:'Hubungan Himpunan', t:'Sama dan Ekuivalen',
+   h:`<div class="def"><b>Sama (A = B)</b>: anggota keduanya persis sama. Urutan dan pengulangan tidak berpengaruh.<br><span class="math">{1, 2, 3} = {3, 1, 2}</span></div>
+      <div class="def" style="border-color:var(--mint);background:#eaf8f6"><b>Ekuivalen (A ~ B)</b>: banyak anggotanya sama, <span class="math">n(A) = n(B)</span>.<br><span class="math">{a, b, c} ~ {1, 2, 3}</span></div>
+      <p>Himpunan yang sama pasti ekuivalen, tetapi himpunan yang ekuivalen belum tentu sama.</p>`,
+   st: mk('disjoint', {So:1, la:1, lb:1}),
+   cap:'Dua himpunan yang terpisah dapat ekuivalen walaupun anggotanya berbeda.' },
+ { k:'Diagram Venn', t:'Diagram Venn dan Komplemen',
+   h:`<p>Diagram Venn menggambarkan himpunan sebagai lingkaran di dalam persegi panjang <b>S</b>.</p>
+      <div class="def"><b>Komplemen</b> A, ditulis <span class="math">A<sup>c</sup></span>, adalah anggota S yang <b>bukan</b> anggota A.</div>
+      <div class="ex"><b>Contoh.</b> S = {1, 2, …, 10}, A = {2, 4, 6, 8}<br><span class="math">A<sup>c</sup> = {1, 3, 5, 7, 9, 10}</span></div>`,
+   st: mk('single', {So:1, la:1, hCompA:1}),
+   cap:'Daerah merah muda adalah A<sup>c</sup>: semua bagian S di luar lingkaran A.' },
+ { k:'Operasi Himpunan', t:'Irisan (∩)',
+   h:`<div class="def"><span class="math">A ∩ B = { x | x ∈ A <b>dan</b> x ∈ B }</span></div>
+      <div class="ex"><b>Contoh.</b> A = {1, 2, 3, 4, 5}, B = {4, 5, 6, 7}<br><span class="math">A ∩ B = {4, 5}</span></div>
+      <p>Jika <span class="math">A ∩ B = ∅</span>, maka A dan B disebut <b>saling lepas</b>.</p>`,
+   st: mk('overlap', {So:1, la:1, lb:1, nums:1, hInter:1}),
+   cap:'Daerah irisan: anggota yang dimiliki A <b>dan</b> B sekaligus, yaitu 4 dan 5.' },
+ { k:'Operasi Himpunan', t:'Gabungan (∪)',
+   h:`<div class="def"><span class="math">A ∪ B = { x | x ∈ A <b>atau</b> x ∈ B }</span></div>
+      <div class="ex"><b>Contoh.</b> A = {1, 2, 3, 4, 5}, B = {4, 5, 6, 7}<br><span class="math">A ∪ B = {1, 2, 3, 4, 5, 6, 7}</span></div>
+      <div class="def" style="border-color:var(--pink);background:#ffeaf0">Rumus banyak anggota:<br><span class="math">n(A ∪ B) = n(A) + n(B) − n(A ∩ B)</span><br>= 5 + 4 − 2 = 7</div>`,
+   st: mk('overlap', {So:1, la:1, lb:1, nums:1, hUnion:1}),
+   cap:'Gabungan mencakup seluruh daerah lingkaran A dan B. Anggota irisan hanya dihitung sekali.' },
+ { k:'Operasi Himpunan', t:'Selisih (A − B)',
+   h:`<div class="def"><span class="math">A − B = { x | x ∈ A <b>dan</b> x ∉ B }</span></div>
+      <div class="ex"><b>Contoh.</b> A = {1, 2, 3, 4, 5}, B = {4, 5, 6, 7}<br><span class="math">A − B = {1, 2, 3}</span> &nbsp;dan&nbsp; <span class="math">B − A = {6, 7}</span></div>
+      <p>Selisih juga dapat ditulis <span class="math">A − B = A ∩ B<sup>c</sup></span>. Perhatikan bahwa <span class="math">A − B ≠ B − A</span>.</p>`,
+   st: mk('overlap', {So:1, la:1, lb:1, nums:1, hMinus:1}),
+   cap:'A − B adalah bagian A yang tidak tersentuh B: anggotanya 1, 2, dan 3.' },
+ { k:'Operasi Himpunan', t:'Sifat-sifat Operasi',
+   h:`<ul><li><b>Komutatif:</b> <span class="math">A ∪ B = B ∪ A</span>, &nbsp;<span class="math">A ∩ B = B ∩ A</span></li>
+      <li><b>Asosiatif:</b> <span class="math">(A ∪ B) ∪ C = A ∪ (B ∪ C)</span></li>
+      <li><b>Distributif:</b> <span class="math">A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)</span></li></ul>
+      <div class="def"><b>Hukum De Morgan</b><br><span class="math">(A ∪ B)<sup>c</sup> = A<sup>c</sup> ∩ B<sup>c</sup></span><br><span class="math">(A ∩ B)<sup>c</sup> = A<sup>c</sup> ∪ B<sup>c</sup></span></div>`,
+   st: mk('overlap', {So:1, la:1, lb:1, hCompU:1}),
+   cap:'Daerah merah muda adalah (A ∪ B)<sup>c</sup>: di luar kedua lingkaran, sama dengan A<sup>c</sup> ∩ B<sup>c</sup>.' },
+ { k:'Penerapan', t:'Soal Cerita dengan Diagram Venn',
+   h:`<div class="ex"><b>Soal.</b> Dari 40 siswa, 25 suka bakso, 18 suka mie ayam, dan 6 suka keduanya. Berapa siswa yang tidak suka keduanya?</div>
+      <ol><li>Irisan = <b>6</b></li><li>Hanya bakso = 25 − 6 = <b>19</b></li><li>Hanya mie ayam = 18 − 6 = <b>12</b></li><li>Gabungan = 19 + 6 + 12 = 37</li><li>Tidak suka keduanya = 40 − 37 = <b>3</b></li></ol>
+      <p>Mulailah selalu dari <b>daerah irisan</b>, lalu isi daerah yang lain.</p>`,
+   st: mk('overlap', {So:1, la:1, lb:1, cnt:1}),
+   cap:'Angka pada diagram menunjukkan banyak siswa di tiap daerah. A = suka bakso, B = suka mie ayam.' },
+ { k:'Penutup', t:'Ringkasan',
+   h:`<table class="mini"><tr><th>Simbol</th><th>Dibaca</th></tr>
+      <tr><td>x ∈ A</td><td>x anggota A</td></tr><tr><td>A ⊆ B</td><td>A himpunan bagian B</td></tr>
+      <tr><td>A ∩ B</td><td>irisan (dan)</td></tr><tr><td>A ∪ B</td><td>gabungan (atau)</td></tr>
+      <tr><td>A − B</td><td>selisih</td></tr><tr><td>A<sup>c</sup></td><td>komplemen</td></tr><tr><td>n(A)</td><td>banyak anggota</td></tr></table>
+      <p>Sekarang coba menu <b>Simulasi</b>, lalu kerjakan <b>Evaluasi</b>.</p>`,
+   st: mk('overlap', {So:1, la:1, lb:1, hInter:1}), cycle:true,
+   cap:'Diagram bergantian menampilkan A ∩ B, A ∪ B, A − B, dan A<sup>c</sup>.' }
+];
+
+/* =====================================================================
+   MATERI: stage morph
+   ===================================================================== */
+const STP = 'st';
+let cur = mk('none', {}), anim = null, idx = 0, swapTimer = null, cycleTimer = null;
+const seen = new Set([0]);
+const DOTCOL = ['#ef476f','#ffb703','#2ec4b6','#4a90d9','#7a4fd0','#ff7b54'];
+
+function stageExtra() {
+  let n = '';
+  const pos = [[100,128,'1'],[112,166,'2'],[132,146,'3'],[199,132,'4'],[199,168,'5'],[268,134,'6'],[286,166,'7'],[48,50,'8'],[352,50,'9'],[200,258,'10']];
+  n += '<g id="stNums" style="opacity:0">' + pos.map(p => `<text class="num" x="${p[0]}" y="${p[1]}">${p[2]}</text>`).join('') + '</g>';
+  n += '<g id="stCnt" style="opacity:0"><text class="cnt" x="104" y="150">19</text><text class="cnt" x="200" y="150" fill="#a8123a">6</text><text class="cnt" x="296" y="150">12</text><text class="cnt" x="200" y="262">3</text></g>';
+  n += '<g id="stDots" style="opacity:0">' + Array.from({length:12}, (_, i) => `<circle id="stD${i}" r="9" cx="200" cy="150" fill="${DOTCOL[i % 6]}" stroke="#fff" stroke-width="2"/>`).join('') + '</g>';
+  return n;
+}
+function applyStage(s) {
+  setGeom(STP, s);
+  const op = (id, v) => { const e = $('#' + id); if (e) e.style.opacity = Math.max(0, Math.min(1, v)); };
+  op('stS', s.So); op('stlS', s.So);
+  op('stbA', s.Ao); op('stoA', s.Ao); op('stbB', s.Bo); op('stoB', s.Bo);
+  op('sth_A', s.hA); op('sth_B', s.hB); op('sth_inter', s.hInter); op('sth_union', s.hUnion);
+  op('sth_minusAB', s.hMinus); op('sth_minusBA', s.hMinus); op('sth_compA', s.hCompA); op('sth_compU', s.hCompU);
+  op('stlA', s.la); op('stlB', s.lb); op('stNums', s.nums); op('stCnt', s.cnt); op('stDots', s.dots);
+  for (let i = 0; i < 12; i++) { const d = $('#stD' + i); d.setAttribute('cx', s['dx' + i]); d.setAttribute('cy', s['dy' + i]); }
+}
+function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function morphTo(target, dur = 950) {
+  if (anim) cancelAnimationFrame(anim);
+  const from = Object.assign({}, cur);
+  if (reduce || dur === 0) { cur = Object.assign({}, target); applyStage(cur); return; }
+  const t0 = performance.now();
+  (function step(now) {
+    const p = Math.min(1, (now - t0) / dur), e = ease(p), s = {};
+    for (const k in target) s[k] = from[k] + (target[k] - from[k]) * e;
+    cur = s; applyStage(s);
+    if (p < 1) anim = requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ---------- animasi teks ---------- */
+function animateText(root) {
+  let k = 0;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    if (!n.nodeValue.trim()) return;
+    const charMode = !!n.parentElement.closest('.ttl');
+    const frag = document.createDocumentFragment();
+    n.nodeValue.split(/(\s+)/).forEach(tok => {
+      if (!tok) return;
+      if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(tok)); return; }
+      if (charMode) {
+        const nw = document.createElement('span'); nw.className = 'nw';
+        [...tok].forEach(ch => { const c = document.createElement('span'); c.className = 'w'; c.textContent = ch; c.style.setProperty('--d', Math.min(k++ * .028, 1.4) + 's'); nw.appendChild(c); });
+        frag.appendChild(nw);
+      } else {
+        const w = document.createElement('span'); w.className = 'w'; w.textContent = tok; w.style.setProperty('--d', (.25 + Math.min(k++ * .035, 2.2)) + 's'); frag.appendChild(w);
+      }
+    });
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+function slideHTML(i) { const s = SL[i]; return `<div class="kick">${s.k}</div><h2 class="ttl">${s.t}</h2>${s.h}`; }
+
+function renderSlide(dir, first) {
+  const box = $('#slideText'), s = SL[idx];
+  clearInterval(cycleTimer);
+  const swap = () => {
+    box.innerHTML = slideHTML(idx);
+    box.style.setProperty('--dx', (dir || 1) * 40 + 'px');
+    box.classList.remove('out'); box.classList.remove('in'); void box.offsetWidth; box.classList.add('in');
+    animateText(box);
+  };
+  clearTimeout(swapTimer);
+  if (first || reduce) swap(); else { box.style.setProperty('--dx', dir * 40 + 'px'); box.classList.add('out'); swapTimer = setTimeout(swap, 180); }
+  morphTo(s.st, first ? 0 : 950);
+  const cap = $('#stCap'); cap.style.opacity = 0;
+  setTimeout(() => { cap.innerHTML = '<span>' + s.cap + '</span>'; cap.style.opacity = 1; }, first ? 0 : 200);
+  $('#slideNo').textContent = (idx + 1) + ' / ' + SL.length;
+  $('#sBar').style.width = ((idx + 1) / SL.length * 100) + '%';
+  $('#bBack').disabled = idx === 0; $('#bNext').disabled = idx === SL.length - 1;
+  seen.add(idx); updateDots(); updateSideProg();
+  if (s.cycle && !reduce) startCycle();
+}
+function startCycle() {
+  const seq = [['hInter','A ∩ B'], ['hUnion','A ∪ B'], ['hMinus','A − B'], ['hCompA','A<sup>c</sup>']];
+  let i = 0;
+  cycleTimer = setInterval(() => {
+    if (idx !== SL.length - 1) return;
+    const key = seq[i % seq.length][0];
+    const t = Object.assign({}, SL[idx].st, {hInter:0, hUnion:0, hMinus:0, hCompA:0});
+    t[key] = 1; morphTo(t, 600);
+    $('#stCap').innerHTML = '<span>Daerah merah muda: <b>' + seq[i % seq.length][1] + '</b></span>';
+    i++;
+  }, 1900);
+}
+function go(n) { if (n < 0 || n >= SL.length || n === idx) return; const d = n > idx ? 1 : -1; idx = n; renderSlide(d); }
+function buildDots() {
+  const d = $('#dots'); d.innerHTML = '';
+  SL.forEach((s, i) => { const b = document.createElement('button'); b.title = (i + 1) + '. ' + s.t.replace(/<[^>]+>/g, ''); b.setAttribute('aria-label', 'Slide ' + (i + 1)); b.onclick = () => go(i); d.appendChild(b); });
+}
+function updateDots() { $$('#dots button').forEach((b, i) => { b.className = i === idx ? 'on' : seen.has(i) ? 'seen' : ''; }); }
+function updateSideProg() { const p = Math.round(seen.size / SL.length * 100); $('#sbPct').textContent = p + '%'; $('#sbBar').style.width = p + '%'; }
+
+$('#stageBox').innerHTML = venn(STP, stageExtra());
+buildDots();
+$('#bBack').onclick = () => go(idx - 1);
+$('#bNext').onclick = () => go(idx + 1);
+document.addEventListener('keydown', e => {
+  if (!$('#p-materi').classList.contains('show')) return;
+  if (/input|textarea|select/i.test(e.target.tagName)) return;
+  if (e.key === 'ArrowRight') go(idx + 1); if (e.key === 'ArrowLeft') go(idx - 1);
+});
+applyStage(cur);
+renderSlide(1, true);
+
+/* =====================================================================
+   NAVIGASI MENU
+   ===================================================================== */
+function showPage(id) {
+  $$('.page').forEach(p => p.classList.toggle('show', p.id === 'p-' + id));
+  $$('.nav').forEach(b => b.classList.toggle('on', b.dataset.go === id));
+  if (id !== 'materi') clearInterval(cycleTimer); else if (SL[idx].cycle && !reduce) startCycle();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+$$('.nav').forEach(b => b.onclick = () => showPage(b.dataset.go));
+
+/* =====================================================================
+   SIMULASI
+   ===================================================================== */
+$$('#simTabs .tab').forEach(t => t.onclick = () => {
+  $$('#simTabs .tab').forEach(x => x.classList.toggle('on', x === t));
+  $$('.simwrap').forEach(w => w.classList.toggle('show', w.id === 'sim-' + t.dataset.t));
+});
+
+/* ---------- 1. Operasi ---------- */
+const OPS = [
+  {id:'union',   t:'A ∪ B',   f:(a,b)=>a||b},
+  {id:'inter',   t:'A ∩ B',   f:(a,b)=>a&&b},
+  {id:'minusAB', t:'A − B',   f:(a,b)=>a&&!b},
+  {id:'minusBA', t:'B − A',   f:(a,b)=>b&&!a},
+  {id:'compA',   t:'A<sup>c</sup>', f:(a,b)=>!a},
+  {id:'compB',   t:'B<sup>c</sup>', f:(a,b)=>!b},
+  {id:'compU',   t:'(A ∪ B)<sup>c</sup>', f:(a,b)=>!a&&!b},
+  {id:'sym',     t:'A △ B',   f:(a,b)=>a!==b}
+];
+const PRESETS = [
+  {n:'Angka 1–12', S:'1,2,3,4,5,6,7,8,9,10,11,12', A:'1,2,3,4,5,6', B:'4,5,6,7,8'},
+  {n:'Hasil bumi Maluku', S:'pala,cengkih,sagu,kelapa,ikan,kenari,pisang', A:'pala,cengkih,kelapa', B:'cengkih,sagu,kelapa,kenari'},
+  {n:'A ⊂ B', S:'1,2,3,4,5,6,7,8,9,10', A:'2,4', B:'2,4,6,8'},
+  {n:'Saling lepas', S:'1,2,3,4,5,6,7,8,9,10', A:'1,3,5', B:'2,4,6'}
+];
+let opSel = 'inter';
+const parseSet = s => { const o = []; s.split(/[,;]+/).forEach(x => { x = x.trim(); if (x && !o.includes(x)) o.push(x); }); return o; };
+const sortSmart = a => a.every(x => /^-?\d+(\.\d+)?$/.test(x)) ? a.slice().sort((x, y) => x - y) : a;
+const setStr = a => '{' + a.join(', ') + '}';
+
+function layoutBox(items, b, fs) {
+  if (!items.length) return '';
+  const maxLen = Math.max(...items.map(s => s.length)), cw = Math.max(24, maxLen * 7.4 + 8), ch = 20;
+  const cols = Math.max(1, Math.floor((b.x1 - b.x0) / cw)), rows = Math.max(1, Math.floor((b.y1 - b.y0) / ch)), cap = cols * rows;
+  let list = items;
+  if (items.length > cap) list = items.slice(0, cap - 1).concat(['+' + (items.length - cap + 1)]);
+  const used = Math.ceil(list.length / cols), cy = (b.y0 + b.y1) / 2, cx = (b.x0 + b.x1) / 2;
+  return { list, cols, cw, ch, used, cx, cy };
+}
+function placeTexts(items, b, onSet) {
+  const L = layoutBox(items, b); if (!L) return '';
+  let out = '';
+  L.list.forEach((t, i) => {
+    const r = Math.floor(i / L.cols), c = i % L.cols, inRow = Math.min(L.cols, L.list.length - r * L.cols);
+    const x = L.cx - inRow * L.cw / 2 + L.cw / 2 + c * L.cw, y = L.cy - L.used * L.ch / 2 + L.ch / 2 + r * L.ch;
+    out += `<text class="it${onSet && onSet.has(t) ? ' on' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}">${esc(t)}</text>`;
+  });
+  return out;
+}
+function renderOp() {
+  let A = sortSmart(parseSet($('#inA').value)), B = sortSmart(parseSet($('#inB').value)), S = sortSmart(parseSet($('#inS').value));
+  const added = [];
+  [...A, ...B].forEach(x => { if (!S.includes(x)) { S.push(x); added.push(x); } });
+  const a = new Set(A), b = new Set(B);
+  const op = OPS.find(o => o.id === opSel);
+  const res = S.filter(x => op.f(a.has(x), b.has(x)));
+  const rs = new Set(res);
+  const regions = {
+    oA: A.filter(x => !b.has(x)), inn: A.filter(x => b.has(x)), oB: B.filter(x => !a.has(x)), out: S.filter(x => !a.has(x) && !b.has(x))
+  };
+  let g = '';
+  g += placeTexts(regions.oA, {x0:84, x1:160, y0:102, y1:198}, rs);
+  g += placeTexts(regions.inn, {x0:180, x1:220, y0:110, y1:190}, rs);
+  g += placeTexts(regions.oB, {x0:240, x1:316, y0:102, y1:198}, rs);
+  const h = Math.ceil(regions.out.length / 2);
+  g += placeTexts(regions.out.slice(0, h), {x0:24, x1:376, y0:24, y1:62}, rs);
+  g += placeTexts(regions.out.slice(h), {x0:24, x1:376, y0:240, y1:276}, rs);
+  $('#smItems').innerHTML = g;
+  OPS.forEach(o => $('#smh_' + o.id).style.opacity = o.id === opSel ? 1 : 0);
+  $('#opRes').innerHTML = op.t + ' = ' + setStr(res) + ' &nbsp; <small>n = ' + res.length + '</small>';
+  const rel = [];
+  rel.push('<b>n(A)</b> = ' + A.length + ', <b>n(B)</b> = ' + B.length + ', <b>n(A ∩ B)</b> = ' + regions.inn.length + ', <b>n(A ∪ B)</b> = ' + (A.length + B.length - regions.inn.length) + ', <b>n(S)</b> = ' + S.length);
+  const subAB = A.every(x => b.has(x)), subBA = B.every(x => a.has(x));
+  if (A.length && B.length && subAB && subBA) rel.push('A = B (anggotanya sama).');
+  else if (A.length && subAB) rel.push('A ⊆ B: setiap anggota A juga anggota B.');
+  else if (B.length && subBA) rel.push('B ⊆ A: setiap anggota B juga anggota A.');
+  if (A.length && B.length && !regions.inn.length) rel.push('A dan B <b>saling lepas</b> (A ∩ B = ∅).');
+  if (added.length) rel.push('Anggota ' + added.map(esc).join(', ') + ' belum ada di S, sehingga ditambahkan otomatis.');
+  $('#opInfo').innerHTML = rel.join('<br>');
+}
+(function initOp() {
+  const items = '<g id="smItems"></g>';
+  $('#smBox').innerHTML = venn('sm', items);
+  setGeom('sm', OVERLAP);
+  $('#opBtns').innerHTML = OPS.map(o => `<button data-op="${o.id}" class="${o.id === opSel ? 'on' : ''}">${o.t}</button>`).join('');
+  $('#opBtns').onclick = e => { const b = e.target.closest('button'); if (!b) return; opSel = b.dataset.op; $$('#opBtns button').forEach(x => x.classList.toggle('on', x === b)); renderOp(); };
+  $('#presets').innerHTML = PRESETS.map((p, i) => `<button data-i="${i}">${p.n}</button>`).join('');
+  $('#presets').onclick = e => { const b = e.target.closest('button'); if (!b) return; const p = PRESETS[b.dataset.i]; $('#inS').value = p.S; $('#inA').value = p.A; $('#inB').value = p.B; renderOp(); };
+  ['inS', 'inA', 'inB'].forEach(id => $('#' + id).addEventListener('input', renderOp));
+  const p = PRESETS[0]; $('#inS').value = p.S; $('#inA').value = p.A; $('#inB').value = p.B;
+  $('#smNote').textContent = 'Anggota yang masuk hasil operasi diberi warna merah dan huruf tebal.';
+  renderOp();
+})();
+
+/* ---------- 2. Himpunan bagian ---------- */
+const POOL = [['pala','🌰'], ['cengkih','🌸'], ['sagu','🍚'], ['kelapa','🥥'], ['ikan','🐟']];
+let poolSel = new Set(['pala', 'cengkih', 'sagu']);
+function choose(n, k) { let r = 1; for (let i = 1; i <= k; i++) r = r * (n - k + i) / i; return Math.round(r); }
+function renderKuasa() {
+  const el = POOL.map(p => p[0]).filter(x => poolSel.has(x)), n = el.length;
+  $('#pool').innerHTML = POOL.map(p => `<button class="${poolSel.has(p[0]) ? 'on' : ''}" data-x="${p[0]}">${p[1]} ${p[0]}</button>`).join('');
+  $('#kRes').innerHTML = 'H = ' + (n ? setStr(el) : '∅') + ' &nbsp; → &nbsp; n(H) = ' + n + ' &nbsp; → &nbsp; 2<sup>' + n + '</sup> = <b>' + Math.pow(2, n) + '</b> himpunan bagian';
+  let tb = '<table class="mini"><tr><th>Banyak anggota</th>' + el.concat(['']).map((_, i) => `<td>${i}</td>`).join('') + '</tr><tr><th>Banyak himpunan</th>' + el.concat(['']).map((_, i) => `<td>${choose(n, i)}</td>`).join('') + '</tr></table>';
+  tb += `<div class="info">Himpunan bagian sejati (selain H sendiri): <b>${Math.pow(2, n) - 1}</b>. Himpunan kosong dan H selalu termasuk himpunan bagian.</div>`;
+  $('#kTbl').innerHTML = tb;
+  const subs = [];
+  for (let m = 0; m < (1 << n); m++) { const s = el.filter((_, i) => m & (1 << i)); subs.push(s); }
+  subs.sort((a, b) => a.length - b.length);
+  $('#subs').innerHTML = subs.map((s, i) => `<span class="sub s${s.length}" style="--d:${(i * .03).toFixed(2)}s">${s.length ? setStr(s) : '∅'}</span>`).join('');
+}
+$('#pool').onclick = e => { const b = e.target.closest('button'); if (!b) return; const x = b.dataset.x; poolSel.has(x) ? poolSel.delete(x) : poolSel.add(x); renderKuasa(); };
+renderKuasa();
+
+/* ---------- 3. Diagram cacah ---------- */
+const SCN = [
+  {n:'Siswa: bakso dan mie ayam', all:'Jumlah siswa', a:'Suka bakso', b:'Suka mie ayam', S:40, A:25, B:18, I:6},
+  {n:'Pedagang pasar Ambon: pala dan cengkih', all:'Jumlah pedagang', a:'Jual pala', b:'Jual cengkih', S:30, A:18, B:14, I:7},
+  {n:'Siswa: sepak bola dan voli', all:'Jumlah siswa', a:'Gemar sepak bola', b:'Gemar voli', S:36, A:21, B:15, I:7}
+];
+function renderCacah(fromScn) {
+  const sc = SCN[+$('#scn').value];
+  if (fromScn) { $('#rS').value = sc.S; $('#rA').value = sc.A; $('#rB').value = sc.B; $('#rI').value = sc.I; }
+  $('#lS').textContent = sc.all; $('#lA').textContent = sc.a; $('#lB').textContent = sc.b;
+  let S = +$('#rS').value, A = +$('#rA').value, B = +$('#rB').value, I = +$('#rI').value, note = '';
+  if (A > S) { A = S; note = 'n(A) tidak boleh melebihi jumlah semesta.'; }
+  if (B > S) { B = S; note = 'n(B) tidak boleh melebihi jumlah semesta.'; }
+  if (I > Math.min(A, B)) { I = Math.min(A, B); note = 'Irisan tidak boleh lebih besar dari A maupun B.'; }
+  if (A + B - I > S) { I = A + B - S; note = 'Gabungan tidak boleh melebihi semesta, sehingga irisan minimal ' + I + '.'; }
+  $('#rA').max = S; $('#rB').max = S; $('#rI').max = Math.min(A, B);
+  $('#rS').value = S; $('#rA').value = A; $('#rB').value = B; $('#rI').value = I;
+  $('#oS').textContent = S; $('#oA').textContent = A; $('#oB').textContent = B; $('#oI').textContent = I;
+  const oa = A - I, ob = B - I, un = oa + I + ob, none = S - un;
+  $('#cnA').textContent = oa; $('#cnI').textContent = I; $('#cnB').textContent = ob; $('#cnO').textContent = none;
+  $('#cRes').innerHTML = 'n(A ∪ B) = ' + A + ' + ' + B + ' − ' + I + ' = <b>' + un + '</b><br>Hanya A = ' + oa + ' &nbsp;|&nbsp; Hanya B = ' + ob + ' &nbsp;|&nbsp; Di luar A dan B = <b>' + none + '</b>';
+  $('#cNote').textContent = note || 'Geser penggeser dan perhatikan bagaimana angka pada diagram berubah.';
+}
+(function initCacah() {
+  $('#cnBox').innerHTML = venn('cn', '<g><text id="cnA" class="cnt" x="104" y="150">0</text><text id="cnI" class="cnt" x="200" y="150" fill="#a8123a">0</text><text id="cnB" class="cnt" x="296" y="150">0</text><text id="cnO" class="cnt" x="200" y="262">0</text></g>');
+  setGeom('cn', OVERLAP);
+  $('#cnh_inter').style.opacity = .55;
+  $('#scn').innerHTML = SCN.map((s, i) => `<option value="${i}">${s.n}</option>`).join('');
+  $('#scn').onchange = () => renderCacah(true);
+  ['rS', 'rA', 'rB', 'rI'].forEach(id => $('#' + id).addEventListener('input', () => renderCacah(false)));
+  renderCacah(true);
+})();
+
+/* =====================================================================
+   EVALUASI
+   ===================================================================== */
+const BANK = [
+ {q:'Berikut ini yang merupakan himpunan adalah …', o:['Kumpulan bunga yang indah','Kumpulan bilangan prima kurang dari 10','Kumpulan siswa yang pintar','Kumpulan makanan yang lezat'], a:1, e:'Hanya “bilangan prima kurang dari 10” yang batasannya jelas, yaitu {2, 3, 5, 7}. Kata indah, pintar, dan lezat bersifat subjektif.'},
+ {q:'Himpunan A = {x | x bilangan genap, 2 ≤ x ≤ 10}. Jika ditulis dengan mendaftar anggotanya, A = …', o:['{2, 4, 6, 8}','{2, 4, 6, 8, 10}','{4, 6, 8, 10}','{0, 2, 4, 6, 8, 10}'], a:1, e:'Bilangan genap dari 2 sampai 10 (2 dan 10 termasuk) adalah 2, 4, 6, 8, 10.'},
+ {q:'Diketahui K adalah himpunan huruf pada kata “MALUKU”. Nilai n(K) adalah …', o:['4','5','6','7'], a:1, e:'Huruf yang berbeda adalah M, A, L, U, K sehingga ada 5. Huruf U yang muncul dua kali hanya dihitung satu kali.'},
+ {q:'Diketahui P = {2, 4, 6, 8}. Pernyataan yang benar adalah …', o:['5 ∈ P','4 ∉ P','2 ∈ P','8 ∉ P'], a:2, e:'2 adalah anggota P sehingga 2 ∈ P. Pilihan lain salah: 5 bukan anggota P, sedangkan 4 dan 8 adalah anggota P.'},
+ {q:'Himpunan berikut yang merupakan himpunan kosong adalah …', o:['{x | x bilangan prima genap}','{x | x bilangan asli kurang dari 1}','{x | x bilangan cacah kurang dari 1}','{x | x faktor dari 1}'], a:1, e:'Bilangan asli dimulai dari 1, sehingga tidak ada yang kurang dari 1. Pilihan lain berturut-turut berisi {2}, {0}, dan {1}.'},
+ {q:'Banyak himpunan bagian dari M = {a, b, c, d} adalah …', o:['4','8','16','32'], a:2, e:'Banyak himpunan bagian = 2ⁿ = 2⁴ = 16.'},
+ {q:'Banyak himpunan bagian dari A = {1, 2, 3} yang memiliki tepat dua anggota adalah …', o:['2','3','4','6'], a:1, e:'Himpunan bagiannya: {1,2}, {1,3}, dan {2,3}, jadi ada 3.'},
+ {q:'Diketahui S = {1, 2, 3, …, 10} dan A = {2, 4, 6, 8}. Komplemen A (A<sup>c</sup>) adalah …', o:['{1, 3, 5, 7, 9}','{1, 3, 5, 7, 9, 10}','{2, 4, 6, 8, 10}','{10}'], a:1, e:'A<sup>c</sup> berisi anggota S yang bukan anggota A: 1, 3, 5, 7, 9, dan 10.'},
+ {q:'Diketahui A = {1, 2, 3, 4, 5} dan B = {4, 5, 6, 7}. Maka A ∩ B = …', o:['{4, 5}','{1, 2, 3}','{6, 7}','{1, 2, 3, 4, 5, 6, 7}'], a:0, e:'Irisan berisi anggota yang ada di A dan di B, yaitu 4 dan 5.'},
+ {q:'Diketahui A = {1, 2, 3, 4, 5} dan B = {4, 5, 6, 7}. Maka A ∪ B = …', o:['{1, 2, 3, 4, 5, 6, 7}','{1, 2, 3, 6, 7}','{4, 5}','{1, 2, 3, 4, 5, 6}'], a:0, e:'Gabungan memuat semua anggota A atau B, anggota yang sama ditulis satu kali: {1, 2, 3, 4, 5, 6, 7}.'},
+ {q:'Diketahui A = {1, 2, 3, 4, 5} dan B = {4, 5, 6, 7}. Maka A − B = …', o:['{1, 2, 3}','{6, 7}','{4, 5}','{1, 2, 3, 6, 7}'], a:0, e:'A − B berisi anggota A yang bukan anggota B: 1, 2, 3.'},
+ {q:'Jika n(A) = 20, n(B) = 15, dan n(A ∩ B) = 8, maka n(A ∪ B) = …', o:['27','35','23','43'], a:0, e:'n(A ∪ B) = n(A) + n(B) − n(A ∩ B) = 20 + 15 − 8 = 27.'},
+ {q:'Diketahui A = {1, 2, 3} dan B = {1, 2, 3, 4, 5}. Hubungan yang benar antara A dan B adalah …', o:['B ⊂ A','A ⊂ B','A = B','A ∩ B = B'], a:1, e:'Semua anggota A ada di B dan B punya anggota lain (4 dan 5), sehingga A ⊂ B.'},
+ {q:'Himpunan yang sama dengan A = {x | x bilangan asli kurang dari 4} adalah …', o:['{0, 1, 2, 3}','{1, 2, 3, 4}','{3, 1, 2}','{2, 3}'], a:2, e:'Bilangan asli kurang dari 4 adalah 1, 2, 3. Urutan penulisan tidak mempengaruhi kesamaan himpunan.'},
+ {q:'Himpunan P = {a, b, c} ekuivalen dengan himpunan …', o:['{1, 2}','{x, y, z}','{1, 2, 3, 4}','{a, b}'], a:1, e:'Himpunan ekuivalen memiliki banyak anggota yang sama. n(P) = 3 dan n({x, y, z}) = 3.'},
+ {q:'Dari 40 siswa, 25 siswa suka bakso, 18 siswa suka mie ayam, dan 6 siswa suka keduanya. Banyak siswa yang tidak suka keduanya adalah …', o:['3','6','9','12'], a:0, e:'Gabungan = 25 + 18 − 6 = 37. Tidak suka keduanya = 40 − 37 = 3.'},
+ {q:'Dari 36 siswa, 21 gemar sepak bola, 15 gemar voli, dan 7 gemar keduanya. Banyak siswa yang <b>hanya</b> gemar voli adalah …', o:['8','14','15','22'], a:0, e:'Hanya voli = n(voli) − irisan = 15 − 7 = 8.'},
+ {q:'Diketahui A = {bilangan prima kurang dari 12} dan B = {bilangan ganjil dari 1 sampai 9}. Maka A ∩ B = …', o:['{3, 5, 7}','{2, 3, 5, 7}','{3, 5, 7, 11}','{1, 3, 5, 7, 9}'], a:0, e:'A = {2, 3, 5, 7, 11} dan B = {1, 3, 5, 7, 9}. Anggota yang sama: 3, 5, 7.'},
+ {q:'Menurut hukum De Morgan, (A ∪ B)<sup>c</sup> sama dengan …', o:['A<sup>c</sup> ∪ B<sup>c</sup>','A<sup>c</sup> ∩ B<sup>c</sup>','A ∩ B','A − B'], a:1, e:'Hukum De Morgan: komplemen dari gabungan sama dengan irisan dari komplemen-komplemennya.'},
+ {q:'Dari 30 pedagang di pasar, 18 menjual pala, 14 menjual cengkih, dan 5 pedagang tidak menjual keduanya. Banyak pedagang yang menjual pala dan cengkih sekaligus adalah …', o:['5','7','9','11'], a:1, e:'Yang menjual minimal salah satu = 30 − 5 = 25. Irisan = 18 + 14 − 25 = 7.'}
+];
+const Q = {order:[], ans:[], cur:0, deadline:0, tick:null, running:false, nama:'', kelas:'', start:0, result:null};
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const KEYS = ['A', 'B', 'C', 'D'];
+const fmt = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+
+function startQuiz() {
+  const nama = $('#fNama').value.trim(), kelas = $('#fKelas').value.trim(), err = $('#evErr');
+  if (nama.length < 3 || !kelas) { err.style.display = 'block'; err.textContent = 'Isi nama lengkap (minimal 3 huruf) dan kelas terlebih dahulu.'; return; }
+  err.style.display = 'none';
+  Q.nama = nama; Q.kelas = kelas;
+  Q.order = shuffle(BANK.map((_, i) => i)).map(i => ({i, opts: shuffle([0, 1, 2, 3])}));
+  Q.ans = Array(BANK.length).fill(null); Q.cur = 0; Q.running = true;
+  Q.start = Date.now(); Q.deadline = Q.start + DURASI_MENIT * 60000;
+  $('#evStart').style.display = 'none'; $('#evDone').style.display = 'none'; $('#evQuiz').style.display = 'block';
+  $('#qWho').textContent = nama + ' · Kelas ' + kelas;
+  $('#qNo').innerHTML = Q.order.map((_, i) => `<button data-n="${i}">${i + 1}</button>`).join('');
+  renderQ(); clearInterval(Q.tick); Q.tick = setInterval(tickQ, 250); tickQ();
+  window.scrollTo({top: 0});
+}
+function tickQ() {
+  const left = Q.deadline - Date.now(), t = $('#qTimer');
+  t.textContent = fmt(left);
+  t.className = 'timer' + (left < 60000 ? ' danger' : left < 300000 ? ' warn' : '');
+  if (left <= 0) finishQuiz(true);
+}
+function renderQ() {
+  const o = Q.order[Q.cur], item = BANK[o.i];
+  $('#qNum').textContent = 'Soal ' + (Q.cur + 1) + ' dari ' + BANK.length;
+  $('#qText').innerHTML = item.q;
+  $('#qOpts').innerHTML = o.opts.map((oi, k) => `<div class="opt${Q.ans[Q.cur] === oi ? ' sel' : ''}" data-v="${oi}" role="radio" tabindex="0" aria-checked="${Q.ans[Q.cur] === oi}"><span class="k">${KEYS[k]}</span><span>${item.o[oi]}</span></div>`).join('');
+  $('#qPrev').disabled = Q.cur === 0;
+  $('#qNext').disabled = Q.cur === BANK.length - 1;
+  $$('#qNo button').forEach((b, i) => b.className = (Q.ans[i] !== null ? 'done ' : '') + (i === Q.cur ? 'cur' : ''));
+  const n = Q.ans.filter(x => x !== null).length;
+  $('#qAns').textContent = 'Terjawab ' + n + ' dari ' + BANK.length;
+}
+function pick(v) { Q.ans[Q.cur] = +v; renderQ(); }
+$('#qOpts').addEventListener('click', e => { const d = e.target.closest('.opt'); if (d && Q.running) pick(d.dataset.v); });
+$('#qOpts').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('opt')) { e.preventDefault(); pick(e.target.dataset.v); } });
+$('#qNo').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { Q.cur = +b.dataset.n; renderQ(); } });
+$('#qPrev').onclick = () => { if (Q.cur > 0) { Q.cur--; renderQ(); } };
+$('#qNext').onclick = () => { if (Q.cur < BANK.length - 1) { Q.cur++; renderQ(); } };
+$('#bStartQ').onclick = startQuiz;
+$('#bFinish').onclick = () => {
+  const blank = Q.ans.filter(x => x === null).length;
+  if (confirm(blank ? 'Masih ada ' + blank + ' soal belum dijawab. Kumpulkan sekarang?' : 'Kumpulkan jawaban sekarang?')) finishQuiz(false);
+};
+window.addEventListener('beforeunload', e => { if (Q.running) { e.preventDefault(); e.returnValue = ''; } });
+
+function finishQuiz(timeout) {
+  if (!Q.running) return;
+  Q.running = false; clearInterval(Q.tick);
+  const end = Math.min(Date.now(), Q.deadline), used = end - Q.start;
+  let benar = 0, kosong = 0; const okIds = [], salahIds = [];
+  Q.order.forEach((o, n) => {
+    const a = Q.ans[n];
+    if (a === null) { kosong++; salahIds.push(o.i + 1); }
+    else if (a === BANK[o.i].a) { benar++; okIds.push(o.i + 1); }
+    else salahIds.push(o.i + 1);
+  });
+  const nilai = Math.round(benar / BANK.length * 100);
+  Q.result = {nama:Q.nama, kelas:Q.kelas, nilai, benar, salah:BANK.length - benar - kosong, kosong, used, timeout, okIds: okIds.sort((a, b) => a - b), salahIds: salahIds.sort((a, b) => a - b), waktu:new Date()};
+  showResult(); sendResult();
+}
+function usedStr(ms) { const s = Math.round(ms / 1000); return Math.floor(s / 60) + ' menit ' + (s % 60) + ' detik'; }
+function showResult() {
+  const r = Q.result;
+  $('#evQuiz').style.display = 'none'; $('#evDone').style.display = 'block';
+  $('#dHello').textContent = (r.timeout ? 'Waktu habis. ' : 'Selesai. ') + r.nama + ' · Kelas ' + r.kelas;
+  $('#dScore').textContent = r.nilai;
+  const pred = r.nilai >= 85 ? 'Sangat baik' : r.nilai >= 70 ? 'Baik' : r.nilai >= 55 ? 'Cukup' : 'Perlu belajar lagi';
+  $('#dDetail').innerHTML = `<span class="chipk" style="background:#d9f3e6;color:#14633d">Benar ${r.benar}</span><span class="chipk" style="background:#ffd9d9;color:#8a1414">Salah ${r.salah}</span><span class="chipk" style="background:#eee;color:#555">Kosong ${r.kosong}</span><br><b>${pred}</b> · waktu pengerjaan ${usedStr(r.used)}`;
+  const box = $('#dRev');
+  box.innerHTML = '<h3 style="color:var(--navy)">Pembahasan</h3>' + Q.order.map((o, n) => {
+    const it = BANK[o.i], a = Q.ans[n], ok = a === it.a;
+    return `<div class="rev ${ok ? 'r' : 'w'}"><b>${n + 1}.</b> ${it.q}<br><small>Jawaban Anda: ${a === null ? '(kosong)' : it.o[a]} ${ok ? '✔' : '✘'}${ok ? '' : ' · Jawaban benar: ' + it.o[it.a]}</small><br><small>${it.e}</small></div>`;
+  }).join('');
+}
+function resultText() {
+  const r = Q.result, tgl = r.waktu.toLocaleString('id-ID', {dateStyle:'full', timeStyle:'short'});
+  return [
+    'HASIL EVALUASI MATERI HIMPUNAN', '',
+    'Nama: ' + r.nama, 'Kelas: ' + r.kelas, 'Nilai: ' + r.nilai + ' (skala 0-100)',
+    'Benar: ' + r.benar + ' dari ' + BANK.length + ' | Salah: ' + r.salah + ' | Kosong: ' + r.kosong,
+    'Waktu pengerjaan: ' + usedStr(r.used) + (r.timeout ? ' (waktu habis)' : ''),
+    'Selesai: ' + tgl, '',
+    'Nomor soal benar (urutan bank soal): ' + (r.okIds.join(', ') || '-'),
+    'Nomor soal salah/kosong: ' + (r.salahIds.join(', ') || '-')
+  ].join('\n');
+}
+function setSend(msg, cls) { const s = $('#dSend'); s.className = 'status ' + (cls || ''); s.innerHTML = msg; }
+async function sendResult() {
+  const r = Q.result; $('#bResend').style.display = 'none';
+  setSend('⏳ Mengirim hasil ke email guru…');
+  const payload = {
+    _subject: 'Hasil Evaluasi Himpunan - ' + r.nama + ' (' + r.kelas + ') - Nilai ' + r.nilai,
+    _template: 'table', _captcha: 'false',
+    Nama: r.nama, Kelas: r.kelas, Nilai: r.nilai, Benar: r.benar, Salah: r.salah, Kosong: r.kosong,
+    'Waktu pengerjaan': usedStr(r.used), Selesai: r.waktu.toLocaleString('id-ID'),
+    'Soal benar': r.okIds.join(', ') || '-', 'Soal salah atau kosong': r.salahIds.join(', ') || '-'
+  };
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const res = await fetch('https://formsubmit.co/ajax/' + GURU_EMAIL, {
+      method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json'}, body:JSON.stringify(payload), signal:ctl.signal
+    });
+    const data = await res.json().catch(() => ({}));
+    clearTimeout(to);
+    if (res.ok && (data.success === true || data.success === 'true')) {
+      setSend('✔ Hasil sudah dikirim ke email guru.', 'ok');
+    } else {
+      throw new Error(data.message || ('HTTP ' + res.status));
+    }
+  } catch (err) {
+    clearTimeout(to);
+    setSend('⚠ Pengiriman otomatis belum berhasil' + (err && err.message ? ' (' + esc(err.message) + ')' : '') + '. Nilai Anda tetap tersimpan di layar ini. Tekan <b>Kirim lewat aplikasi email</b> untuk mengirim dari email Anda, atau tunjukkan layar ini kepada guru.', 'bad');
+    $('#bResend').style.display = '';
+  }
+}
+$('#bResend').onclick = sendResult;
+$('#bMailto').onclick = () => {
+  const r = Q.result; if (!r) return;
+  location.href = 'mailto:' + GURU_EMAIL + '?subject=' + encodeURIComponent('Hasil Evaluasi Himpunan - ' + r.nama + ' (' + r.kelas + ') - Nilai ' + r.nilai) + '&body=' + encodeURIComponent(resultText());
+};
+$('#bCopy').onclick = function () {
+  const t = resultText(), done = ok => { this.textContent = ok ? 'Tersalin ✔' : 'Salin manual'; setTimeout(() => this.textContent = '📋 Salin hasil', 1600); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(() => done(true), () => done(false));
+  else { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} a.remove(); done(ok); }
+};
+$('#bRev').onclick = () => { const d = $('#dRev'); d.style.display = d.style.display === 'none' ? 'block' : 'none'; };
+</script>
+</body>
+</html>
